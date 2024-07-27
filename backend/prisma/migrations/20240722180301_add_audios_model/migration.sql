@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "Audios" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "todoId" INTEGER NOT NULL,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "Audios_todoId_fkey" FOREIGN KEY ("todoId") REFERENCES "Todos" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

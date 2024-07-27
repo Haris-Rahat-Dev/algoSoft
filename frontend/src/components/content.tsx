@@ -19,6 +19,7 @@ import CloseSvg from "../assets/close.svg";
 import TodoForm from "./todoForm";
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import dayjs from "dayjs";
 
 const Content: React.FC<{
   close?: Dispatch<SetStateAction<boolean>>;
@@ -153,8 +154,14 @@ const Content: React.FC<{
                   gap: 5,
                 }}
               >
-                <Typography>Created on: 23 March 2024</Typography>
-                <Typography>Last edited: 23 March 2024</Typography>
+                <Typography>
+                  Created on:{" "}
+                  {dayjs(currentTodo.created_at).format("D MMMM YYYY")}
+                </Typography>
+                <Typography>
+                  Last edited:{" "}
+                  {dayjs(currentTodo.updated_at).format("D MMMM YYYY")}
+                </Typography>
               </Box>
               <Box>
                 {currentTodo.completed ? (

@@ -48,8 +48,9 @@ const Sidebar: React.FC = () => {
         width: {
           xs: "100%",
           sm: "40%",
-          md: "35%",
-          lg: "20%",
+          md: "30%",
+          lg: "25%",
+          xl: "20%",
         },
         backgroundColor: "#2b2426",
         display: "flex",

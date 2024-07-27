@@ -5,4 +5,6 @@ export type Todo = {
   completed: boolean;
   deleted: boolean;
   audios: [];
+  created_at: string;
+  updated_at: string;
 };

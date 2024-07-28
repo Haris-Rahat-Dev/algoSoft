@@ -112,20 +112,14 @@ Backend
 
 3. **Set up the database with Prisma:**
 
-    - **Generate the Prisma client:**
-      ```bash
-      npx prisma generate
-      ```
-
     - **Run migrations to set up your database:**
       ```bash
       npx prisma migrate dev --name init
       ```
-
-    - **(Optional) Seed the database:**
-      If you have a seed script, you can run it with:
+  
+    - **Generate the Prisma client:**
       ```bash
-      npx prisma db seed
+      npx prisma generate
       ```
 
 4. **Start the backend server:**

@@ -140,9 +140,7 @@ Backend
 
 The backend uses environment variables to manage configuration settings. Create a `.env` file in the `backend` directory and define the following variables as needed:
 
-bash
-
-Copy code
-
+```bash
 `DATABASE_URL="file:./dev.db"`
+```
 

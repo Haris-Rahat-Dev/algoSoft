@@ -6,10 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import SearchSvg from "../assets/search.svg";
 import AddSvg from "../assets/add.svg";
-import MoonSvg from "../assets/moon.svg";
-import CloseSvg from "../assets/close.svg";
 import Stack from "@mui/material/Stack";
-import Collapse from "@mui/material/Collapse";
 import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
@@ -17,10 +14,10 @@ import TodoForm from "./todoForm";
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Content from "./content";
+import Tooltip from "@mui/material/Tooltip";
 
 const Sidebar: React.FC = () => {
   const { todos, currentTodo, setCurrentTodo } = useTodosContext();
-  const [collapse, setCollapse] = useState(false);
   const [search, setSearch] = useState("");
   const [dialog, setDialog] = useState(false);
   const [showContent, setShowContent] = useState(false);
@@ -33,13 +30,22 @@ const Sidebar: React.FC = () => {
     );
   }, [search, todos]);
 
+  const pendingTodos = useMemo(() => {
+    return searchedTodos?.filter((todo) => todo.completed === false);
+  }, [searchedTodos]);
+
+  const completedTodos = useMemo(() => {
+    return searchedTodos?.filter((todo) => todo.completed === true);
+  }, [searchedTodos]);
+
   const handleClose = useCallback(() => {
     setDialog(false);
   }, []);
 
   useEffect(() => {
     if (!isMobile && showContent) setShowContent(false);
-  }, [isMobile, showContent]);
+    if (isMobile) setCurrentTodo(null);
+  }, [isMobile, setCurrentTodo, showContent]);
 
   return (
     <Box
@@ -67,49 +73,27 @@ const Sidebar: React.FC = () => {
         paddingY={2}
         paddingX={2}
         justifyContent={"space-between"}
-      >
-        <IconButton onClick={() => setCollapse(!collapse)}>
-          {!collapse ? (
-            <img src={SearchSvg} width={18} height={18} />
-          ) : (
-            <img src={CloseSvg} width={18} height={18} />
-          )}
-        </IconButton>
-        <IconButton onClick={() => setDialog(true)}>
-          <img src={AddSvg} width={18} height={18} />
-        </IconButton>
-        {/* <IconButton>
-          <img src={SortSvg} width={18} height={18} />
-        </IconButton> */}
-        <IconButton>
-          <img src={MoonSvg} width={18} height={18} />
-        </IconButton>
-      </Stack>
-      <Collapse
-        in={collapse}
-        timeout="auto"
-        unmountOnExit
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          paddingX: 2,
-        }}
+        alignItems={"center"}
+        gap={5}
       >
         <Input
           onChange={({ target: { value } }) => setSearch(value)}
-          onBlur={() => setCollapse(false)}
+          placeholder="Search"
           sx={{
-            marginBottom: 3,
             width: "100%",
           }}
           startAdornment={
             <InputAdornment position="start">
-              <img src={SearchSvg} width={18} height={18} />
+              <img src={SearchSvg} width={24} height={24} />
             </InputAdornment>
           }
         />
-      </Collapse>
+        <Tooltip title={"Add"}>
+          <IconButton onClick={() => setDialog(true)}>
+            <img src={AddSvg} width={24} height={24} />
+          </IconButton>
+        </Tooltip>
+      </Stack>
       <Box
         sx={{
           display: "flex",
@@ -141,73 +125,95 @@ const Sidebar: React.FC = () => {
                 Todos
               </Typography>
             </Box>
-            <Typography
-              marginBottom={2}
-              sx={{
-                color: "#9D9A9B",
-                fontSize: 15,
-                paddingX: 2,
-              }}
-            >
-              Pending Todos
-            </Typography>
-            {searchedTodos
-              ?.filter((todo) => todo.completed === false)
-              ?.map((todo) => (
-                <ListItemButton
+            {searchedTodos.length > 0 ? (
+              <Box>
+                <Typography
+                  marginBottom={2}
                   sx={{
-                    backgroundColor:
-                      currentTodo?.id === todo.id ? "#000" : "transparent",
-                    marginX: 2,
+                    color: "#9D9A9B",
+                    fontSize: 15,
+                    paddingX: 2,
                   }}
-                  onClick={() => {
-                    setCurrentTodo(todo);
-                    if (isMobile) setShowContent(true);
-                  }}
-                  key={todo.id}
                 >
-                  <ListItemText
-                    primary={todo.title}
-                    sx={{
-                      color: currentTodo?.id === todo.id ? "#fff" : "#9D9A9B",
-                    }}
-                  />
-                </ListItemButton>
-              ))}
-            <Typography
-              marginBottom={2}
-              sx={{
-                marginTop: 3,
-                color: "#9D9A9B",
-                fontSize: 15,
-                paddingX: 2,
-              }}
-            >
-              Completed Todos
-            </Typography>
-            {searchedTodos
-              ?.filter((todo) => todo.completed)
-              ?.map((todo) => (
-                <ListItemButton
+                  Pending Todos
+                </Typography>
+                {pendingTodos.length > 0 ? (
+                  pendingTodos?.map((todo) => (
+                    <ListItemButton
+                      sx={{
+                        backgroundColor:
+                          currentTodo?.id === todo.id
+                            ? "#ee5b84"
+                            : "transparent",
+                        marginX: 2,
+                      }}
+                      onClick={() => {
+                        setCurrentTodo(todo);
+                        if (isMobile) setShowContent(true);
+                      }}
+                      key={todo.id}
+                    >
+                      <ListItemText
+                        primary={todo.title}
+                        sx={{
+                          color:
+                            currentTodo?.id === todo.id ? "#fff" : "#9D9A9B",
+                        }}
+                      />
+                    </ListItemButton>
+                  ))
+                ) : (
+                  <Typography color={"#9D9A9B"} paddingX={2}>
+                    No Pending Todos
+                  </Typography>
+                )}
+                <Typography
+                  marginBottom={2}
                   sx={{
-                    backgroundColor:
-                      currentTodo?.id === todo.id ? "#000" : "transparent",
-                    marginX: 2,
+                    marginTop: 3,
+                    color: "#9D9A9B",
+                    fontSize: 15,
+                    paddingX: 2,
                   }}
-                  onClick={() => {
-                    setCurrentTodo(todo);
-                    if (isMobile) setShowContent(true);
-                  }}
-                  key={todo.id}
                 >
-                  <ListItemText
-                    primary={todo.title}
-                    sx={{
-                      color: currentTodo?.id === todo.id ? "#fff" : "#9D9A9B",
-                    }}
-                  />
-                </ListItemButton>
-              ))}
+                  Completed Todos
+                </Typography>
+                {completedTodos.length > 0 ? (
+                  completedTodos?.map((todo) => (
+                    <ListItemButton
+                      sx={{
+                        backgroundColor:
+                          currentTodo?.id === todo.id
+                            ? "#ee5b84"
+                            : "transparent",
+                        marginX: 2,
+                      }}
+                      onClick={() => {
+                        setCurrentTodo(todo);
+                        if (isMobile) setShowContent(true);
+                      }}
+                      key={todo.id}
+                    >
+                      <ListItemText
+                        primary={todo.title}
+                        sx={{
+                          color:
+                            currentTodo?.id === todo.id ? "#fff" : "#9D9A9B",
+                        }}
+                      />
+                    </ListItemButton>
+                  ))
+                ) : (
+                  <Typography color={"#9D9A9B"} paddingX={2}>
+                    No Completed Todos
+                  </Typography>
+                )}
+              </Box>
+            ) : (
+              <Typography color={"#9D9A9B"} paddingX={2}>
+                Add Todos to see them here
+              </Typography>
+            )}
           </Box>
         )}
       </Box>

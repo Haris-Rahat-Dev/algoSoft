@@ -38,7 +38,7 @@ const TodoForm: React.FC<{
       setUpdateTodo(currentTodo);
       if (currentTodo?.audio) {
         setAudioClip({
-          url: `${BASE_URL}/${currentTodo?.audio}`,
+          url: `${BASE_URL}/todos/audio/${currentTodo?.audio}`,
           blob: undefined,
           name: currentTodo?.audio || "",
         });

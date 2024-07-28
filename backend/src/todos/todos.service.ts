@@ -85,6 +85,10 @@ export class TodosService {
   }
 
   async deleteTodo(where: Prisma.TodosWhereUniqueInput): Promise<Todos> {
+    // const todo = await this.prisma.todos.findFirst({ where });
+    // if (todo.audio) {
+    //   this.removeFile(todo.audio);
+    // }
     return this.prisma.todos.update({
       data: {
         deleted: true,

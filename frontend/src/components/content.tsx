@@ -88,30 +88,38 @@ const Content: React.FC<{
                 }}
                 gap={1}
               >
-                <Tooltip title="Complete">
-                  <IconButton
-                    onClick={() => {
-                      completeTodoMutation(currentTodo.id);
-                    }}
-                  >
-                    <img
-                      style={{ fill: "#fff" }}
-                      src={CheckSvg}
-                      width={24}
-                      height={24}
-                    />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Edit">
-                  <IconButton onClick={() => setUpdateDialog(true)}>
-                    <img
-                      style={{ fill: "#fff" }}
-                      src={EditSvg}
-                      width={24}
-                      height={24}
-                    />
-                  </IconButton>
-                </Tooltip>
+                <Stack flexDirection={"row"} alignItems={"center"}>
+                  {!currentTodo?.completed ? (
+                    <Stack flexDirection={"row"} alignItems={"center"}>
+                      <Tooltip title="Complete">
+                        <IconButton
+                          onClick={() => {
+                            completeTodoMutation(currentTodo.id);
+                          }}
+                        >
+                          <img
+                            style={{ fill: "#fff" }}
+                            src={CheckSvg}
+                            width={30}
+                            height={30}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit">
+                        <IconButton onClick={() => setUpdateDialog(true)}>
+                          <img
+                            style={{ fill: "#fff" }}
+                            src={EditSvg}
+                            width={24}
+                            height={24}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    </Stack>
+                  ) : (
+                    <Typography>Marked as Complete</Typography>
+                  )}
+                </Stack>
                 <Tooltip title="Delete">
                   <IconButton
                     onClick={() => {
@@ -166,22 +174,22 @@ const Content: React.FC<{
                   {dayjs(currentTodo.updatedAt).format("D MMMM YYYY")}
                 </Typography>
               </Box>
-              <Box>
-                {currentTodo.completed ? (
-                  <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
-                    <Typography>Marked as Complete</Typography>
-                    <Tooltip title="Delete">
-                      <IconButton
-                        onClick={() => {
-                          deleteTodoMutation(currentTodo.id);
-                        }}
-                      >
-                        <img src={DeleteSvg} width={24} height={24} />
-                      </IconButton>
-                    </Tooltip>
-                  </Stack>
-                ) : (
-                  !isMobile && (
+              {!isMobile && (
+                <Box>
+                  {currentTodo.completed ? (
+                    <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
+                      <Typography>Marked as Complete</Typography>
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={() => {
+                            deleteTodoMutation(currentTodo.id);
+                          }}
+                        >
+                          <img src={DeleteSvg} width={24} height={24} />
+                        </IconButton>
+                      </Tooltip>
+                    </Stack>
+                  ) : (
                     <Stack
                       flex={1}
                       flexDirection={"row"}
@@ -231,9 +239,9 @@ const Content: React.FC<{
                         </IconButton>
                       </Tooltip>
                     </Stack>
-                  )
-                )}
-              </Box>
+                  )}
+                </Box>
+              )}
             </Stack>
             <Box marginTop={2}>
               <Typography

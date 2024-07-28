@@ -15,23 +15,14 @@ export const TodosContext = createContext<{
   currentTodo: Todo | null;
   setCurrentTodo: Dispatch<SetStateAction<Todo | null>>;
   deleteTodoMutation: UseMutateFunction<Todo, Error, number, unknown>;
-  createTodoMutation: UseMutateFunction<
-    Todo,
-    Error,
-    { title: string; description: string },
-    unknown
-  >;
+  createTodoMutation: UseMutateFunction<Todo, Error, FormData, unknown>;
   updateTodoMutation: UseMutateFunction<
     Todo,
     Error,
-    {
-      id: number;
-      title?: string;
-      description?: string;
-      completed?: boolean;
-    },
+    { formData?: FormData; id: number },
     unknown
   >;
+  completeTodoMutation: UseMutateFunction<Todo, Error, number, unknown>;
 } | null>(null);
 
 export const TodosContextProvider: React.FC<PropsWithChildren> = ({
@@ -43,6 +34,7 @@ export const TodosContextProvider: React.FC<PropsWithChildren> = ({
     deleteTodoMutation,
     createTodoMutation,
     updateTodoMutation,
+    completeTodoMutation,
   } = useTodos();
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null);
 
@@ -56,6 +48,7 @@ export const TodosContextProvider: React.FC<PropsWithChildren> = ({
         deleteTodoMutation,
         createTodoMutation,
         updateTodoMutation,
+        completeTodoMutation,
       }}
     >
       {children}

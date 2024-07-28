@@ -16,44 +16,31 @@ const useTodos = () => {
     return data;
   }, []);
 
-  const createTodo = useCallback(
-    async ({ title, description }: { title: string; description: string }) => {
-      const { data } = await axiosInstance.post("/todos", {
-        title,
-        description,
+  const createTodo = useCallback(async (formData) => {
+    const { data } = await axiosInstance.post("/todos", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return data;
+  }, []);
+
+  const updateTodo = useCallback(
+    async ({ formData, id }: { formData?: FormData; id: number }) => {
+      const { data } = await axiosInstance.patch(`/todos/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       return data;
     },
     []
   );
 
-  const updateTodo = useCallback(
-    async ({
-      id,
-      title,
-      description,
-      completed,
-    }: {
-      id: number;
-      title?: string;
-      description?: string;
-      completed?: boolean;
-    }) => {
-      let payLoad = {};
-      if (completed) {
-        payLoad = { completed };
-      } else {
-        payLoad = {
-          title,
-          description,
-        };
-      }
-
-      const { data } = await axiosInstance.patch(`/todos/${id}`, payLoad);
-      return data;
-    },
-    []
-  );
+  const completeTodo = useCallback(async (id: number) => {
+    const { data } = await axiosInstance.patch(`/todos/completeTodo/${id}`, {});
+    return data;
+  }, []);
 
   // Queries
   const { isLoading, error, data } = useQuery({
@@ -97,6 +84,18 @@ const useTodos = () => {
     },
   });
 
+  const { mutate: completeTodoMutation } = useMutation({
+    mutationKey: ["completeTodo"],
+    mutationFn: completeTodo,
+    onSuccess: (updatedTodo: Todo) => {
+      queryClient.setQueryData<Todo[]>(["todos"], (oldTodos = []) => {
+        return oldTodos.map((todo) =>
+          todo.id === updatedTodo.id ? updatedTodo : todo
+        );
+      });
+    },
+  });
+
   return {
     isLoading,
     error,
@@ -104,6 +103,7 @@ const useTodos = () => {
     deleteTodoMutation,
     createTodoMutation,
     updateTodoMutation,
+    completeTodoMutation,
   };
 };
 

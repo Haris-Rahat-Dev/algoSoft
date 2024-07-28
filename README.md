@@ -114,12 +114,7 @@ Backend
 
     - **Run migrations to set up your database:**
       ```bash
-      npx prisma migrate dev --name init
-      ```
-  
-    - **Generate the Prisma client:**
-      ```bash
-      npx prisma generate
+      npx prisma migrate dev
       ```
 
 4. **Start the backend server:**

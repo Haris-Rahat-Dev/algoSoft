@@ -20,6 +20,7 @@ import TodoForm from "./todoForm";
 import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import dayjs from "dayjs";
+import QuestionSvg from "../assets/questionMark.svg";
 
 const Content: React.FC<{
   close?: Dispatch<SetStateAction<boolean>>;
@@ -141,6 +142,10 @@ const Content: React.FC<{
                 lg: "center",
                 md: "center",
               }}
+              gap={{
+                sm: 2,
+                xs: 2,
+              }}
             >
               <Box
                 sx={{
@@ -200,8 +205,8 @@ const Content: React.FC<{
                           <img
                             style={{ fill: "#fff" }}
                             src={CheckSvg}
-                            width={24}
-                            height={24}
+                            width={30}
+                            height={30}
                           />
                         </IconButton>
                       </Tooltip>
@@ -230,34 +235,59 @@ const Content: React.FC<{
               </Box>
             </Stack>
             <Box marginTop={2}>
-              <Typography fontWeight={"500"} color={"#fff"} variant={"h5"}>
-                Title
+              <Typography
+                sx={{
+                  marginTop: 5,
+                  marginBottom: 2,
+                }}
+                fontWeight={"300"}
+                color={"#fff"}
+                variant={"h5"}
+              >
+                {currentTodo?.title}
               </Typography>
               <Typography
-                gutterBottom
+                sx={{
+                  marginBottom: 2,
+                }}
                 fontWeight={"300"}
                 color={"#fff"}
                 variant={"h6"}
               >
-                {currentTodo?.title}
-              </Typography>
-              <Typography fontWeight={"500"} color={"#fff"} variant={"h5"}>
-                Description
-              </Typography>
-              <Typography fontWeight={"300"} color={"#fff"} variant={"h6"}>
                 {currentTodo?.description}
               </Typography>
               {currentTodo?.audio && (
                 <Fragment>
-                  <Typography>Audio</Typography>
-                  <audio src={currentTodo?.audio} controls />
+                  <audio
+                    style={{
+                      backgroundColor: "#ee5b84",
+                      marginTop: 10,
+                      borderRadius: 30,
+                    }}
+                    src={currentTodo?.audio}
+                    controls
+                  />
                 </Fragment>
               )}
             </Box>
           </Stack>
         </Fragment>
       ) : (
-        <Typography>Select a Todo to view it's details</Typography>
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h5">
+            Select a Todo to view it's details
+          </Typography>
+          <img src={QuestionSvg} width={"25%"} height={"25%"} />
+        </Box>
       )}
       {updateDialog && (
         <TodoForm

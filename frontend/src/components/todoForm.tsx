@@ -144,6 +144,8 @@ const TodoForm: React.FC<{
       <DialogContent>
         <Stack gap={2}>
           <TextField
+            fullWidth
+            multiline
             id="outlined-basic"
             label="Title"
             variant="standard"
@@ -171,7 +173,14 @@ const TodoForm: React.FC<{
           </Button>
           {audioClip && (
             <Stack direction="row" spacing={1} alignItems="center">
-              <audio controls>
+              <audio
+                style={{
+                  backgroundColor: "#ee5b84",
+                  marginTop: 10,
+                  borderRadius: 30,
+                }}
+                controls
+              >
                 <source src={audioClip.url} type="audio/wav" />
                 Your browser does not support the audio element.
               </audio>

@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  StreamableFile,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
@@ -15,6 +16,8 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { Todos as TodosModal } from '@prisma/client';
 import { FileInterceptor } from '@nestjs/platform-express/multer/interceptors';
 import { diskStorage } from 'multer';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller('todos')
 export class TodosController {
@@ -85,5 +88,12 @@ export class TodosController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.todosService.deleteTodo({ id: Number(id) });
+  }
+
+  @Get('audio/:fileName')
+  getAudio(@Param('fileName') fileName: string): StreamableFile {
+    const filePath = join(process.cwd(), 'uploads', 'audios', fileName);
+    const file = createReadStream(filePath);
+    return new StreamableFile(file);
   }
 }

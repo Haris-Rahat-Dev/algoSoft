@@ -21,6 +21,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import dayjs from "dayjs";
 import QuestionSvg from "../assets/questionMark.svg";
+import { BASE_URL } from "../contants";
 
 const Content: React.FC<{
   close?: Dispatch<SetStateAction<boolean>>;
@@ -264,7 +265,7 @@ const Content: React.FC<{
                       marginTop: 10,
                       borderRadius: 30,
                     }}
-                    src={currentTodo?.audio}
+                    src={`${BASE_URL}/todos/audio/${currentTodo?.audio}`}
                     controls
                   />
                 </Fragment>

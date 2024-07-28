@@ -11,24 +11,12 @@ datasource db {
 }
 
 model Todos {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   title       String
   description String
-  completed   Boolean  @default(false)
-  deleted     Boolean  @default(false)
-  audios      Audios[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Audios {
-  id      Int     @id @default(autoincrement())
-  name    String
-  todoId  Int
-  deleted Boolean @default(false)
-
-  todo Todos @relation(fields: [todoId], references: [id])
+  completed   Boolean @default(false)
+  deleted     Boolean @default(false)
+  audio       String  @default("")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

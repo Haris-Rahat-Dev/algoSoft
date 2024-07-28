@@ -126,7 +126,7 @@ const Sidebar: React.FC = () => {
                 position: "sticky",
                 top: 0,
                 backgroundColor: "#2b2426",
-                zIndex: 999999,
+                zIndex: 99,
                 paddingY: 1,
                 paddingX: 2,
               }}
@@ -211,7 +211,7 @@ const Sidebar: React.FC = () => {
           </Box>
         )}
       </Box>
-      <TodoForm open={dialog} onClose={handleClose} />
+      {dialog && <TodoForm open={dialog} onClose={handleClose} />}
     </Box>
   );
 };

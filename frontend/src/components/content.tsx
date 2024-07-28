@@ -29,7 +29,7 @@ const Content: React.FC<{
     deleteTodoMutation,
     todos,
     setCurrentTodo,
-    updateTodoMutation,
+    completeTodoMutation,
   } = useTodosContext();
   const [updateDialog, setUpdateDialog] = useState(false);
   const theme = useTheme();
@@ -89,10 +89,7 @@ const Content: React.FC<{
                 <Tooltip title="Complete">
                   <IconButton
                     onClick={() => {
-                      updateTodoMutation({
-                        id: currentTodo.id,
-                        completed: true,
-                      });
+                      completeTodoMutation(currentTodo.id);
                     }}
                   >
                     <img
@@ -156,11 +153,11 @@ const Content: React.FC<{
               >
                 <Typography>
                   Created on:{" "}
-                  {dayjs(currentTodo.created_at).format("D MMMM YYYY")}
+                  {dayjs(currentTodo.createdAt).format("D MMMM YYYY")}
                 </Typography>
                 <Typography>
                   Last edited:{" "}
-                  {dayjs(currentTodo.updated_at).format("D MMMM YYYY")}
+                  {dayjs(currentTodo.updatedAt).format("D MMMM YYYY")}
                 </Typography>
               </Box>
               <Box>
@@ -197,10 +194,7 @@ const Content: React.FC<{
                       <Tooltip title="Complete">
                         <IconButton
                           onClick={() => {
-                            updateTodoMutation({
-                              id: currentTodo.id,
-                              completed: true,
-                            });
+                            completeTodoMutation(currentTodo.id);
                           }}
                         >
                           <img
@@ -253,14 +247,10 @@ const Content: React.FC<{
               <Typography fontWeight={"300"} color={"#fff"} variant={"h6"}>
                 {currentTodo?.description}
               </Typography>
-              {(currentTodo?.audios?.length ?? 0) > 0 && (
+              {currentTodo?.audio && (
                 <Fragment>
-                  <Typography>Audios</Typography>
-                  {currentTodo?.audios.map((audio) => (
-                    <Fragment>
-                      <audio src={audio} controls />
-                    </Fragment>
-                  ))}
+                  <Typography>Audio</Typography>
+                  <audio src={currentTodo?.audio} controls />
                 </Fragment>
               )}
             </Box>
@@ -269,11 +259,13 @@ const Content: React.FC<{
       ) : (
         <Typography>Select a Todo to view it's details</Typography>
       )}
-      <TodoForm
-        open={updateDialog}
-        onClose={handleClose}
-        id={currentTodo?.id}
-      />
+      {updateDialog && (
+        <TodoForm
+          open={updateDialog}
+          onClose={handleClose}
+          id={currentTodo?.id}
+        />
+      )}
     </Box>
   );
 };
